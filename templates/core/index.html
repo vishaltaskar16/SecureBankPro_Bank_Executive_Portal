@@ -1,0 +1,1042 @@
+{% extends 'core/base.html' %} 
+{% load static %} 
+
+{% block head_title %}SecureBank Pro - Modern Banking Solution{% endblock %} 
+
+{% block content %}
+<!-- Hero Section with White Gradient -->
+<head><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css"></head>
+<section class="hero-section position-relative overflow-hidden">
+    <div class="light-gradient text-dark position-relative">
+        <div class="container py-5">
+            <div class="row align-items-center min-vh-50">
+                <div class="col-lg-6">
+                    <div class="mb-4">
+                        <span class="badge bg-primary bg-opacity-10 text-primary mb-3 px-3 py-2">
+                            <i class="bi bi-shield-check me-2"></i>FDIC Insured
+                        </span>
+                        <h1 class="display-5 fw-bold mb-4">
+                            Smart Banking for <span class="text-gradient">Modern Life</span>
+                        </h1>
+                        <p class="lead mb-4 opacity-75">
+                            Experience secure, intelligent banking with real-time insights, 
+                            instant transactions, and personalized financial management.
+                        </p>
+                    </div>
+                    <div class="d-flex flex-wrap gap-3 mb-5">
+                        {% if not request.user.is_authenticated %}
+                        <a href="{% url 'accounts:user_registration' %}" class="btn btn-primary btn-lg px-4">
+                            <i class="bi bi-person-plus me-2"></i> Get Started Free
+                        </a>
+                        <a href="{% url 'accounts:user_login' %}" class="btn btn-outline-primary btn-lg px-4">
+                            <i class="bi bi-box-arrow-in-right me-2"></i> Sign In
+                        </a>
+                        {% else %}
+                        <a href="{% url 'transactions:transaction_report' %}" class="btn btn-primary btn-lg px-4">
+                            <i class="bi bi-speedometer2 me-2"></i> Go to Dashboard
+                        </a>
+                        <a href="{% url 'transactions:deposit_money' %}" class="btn btn-outline-primary btn-lg px-4">
+                            <i class="bi bi-currency-dollar me-2"></i> Make Deposit
+                        </a>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Quick Stats -->
+                    <div class="row g-3">
+                        <div class="col-4">
+                            <div class="bg-light rounded p-3 text-center border">
+                                <div class="text-primary fs-4 fw-bold">10K+</div>
+                                <div class="text-muted small">Active Users</div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="bg-light rounded p-3 text-center border">
+                                <div class="text-success fs-4 fw-bold">99.9%</div>
+                                <div class="text-muted small">Uptime</div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="bg-light rounded p-3 text-center border">
+                                <div class="text-info fs-4 fw-bold">24/7</div>
+                                <div class="text-muted small">Support</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 text-center">
+                    <div class="position-relative">
+                        <img src="{% static 'img/hero.png' %}" 
+                             alt="Modern Banking Dashboard" 
+                             class="img-fluid rounded-3 shadow-lg animate__animated animate__fadeIn"
+                             style="max-height: 400px;">
+                        <div class="position-absolute top-0 start-0 mt-3 ms-3">
+                            <span class="badge bg-success text-white px-3 py-2">
+                                <i class="bi bi-lightning-charge me-1"></i> Live Analytics
+                            </span>
+                        </div>
+                        <div class="position-absolute bottom-0 end-0 mb-3 me-3">
+                            <span class="badge bg-warning text-dark px-3 py-2">
+                                <i class="bi bi-shield-check me-1"></i> Secure
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Grid -->
+<section class="py-5 bg-light-gradient">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-lg-8 mx-auto text-center">
+                <h2 class="fw-bold mb-3">Why SecureBank Pro Stands Out</h2>
+                <p class="text-muted mb-0">Comprehensive features designed for your financial success</p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            <!-- Feature 1 -->
+            <div class="col-md-6 col-lg-3">
+                <div class="card feature-card h-100 border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <div class="feature-icon mb-3">
+                            <i class="bi bi-shield-lock"></i>
+                        </div>
+                        <h5 class="fw-bold mb-3">Bank-Level Security</h5>
+                        <p class="text-muted small">256-bit encryption, biometric login, real-time fraud monitoring</p>
+                        <ul class="list-unstyled small text-muted">
+                            <li class="mb-1"><i class="bi bi-check-circle text-success me-2"></i>Multi-factor auth</li>
+                            <li class="mb-1"><i class="bi bi-check-circle text-success me-2"></i>FDIC insured</li>
+                            <li class="mb-1"><i class="bi bi-check-circle text-success me-2"></i>Secure servers</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Feature 2 -->
+            <div class="col-md-6 col-lg-3">
+                <div class="card feature-card h-100 border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <div class="feature-icon mb-3">
+                            <i class="bi bi-lightning-charge"></i>
+                        </div>
+                        <h5 class="fw-bold mb-3">Instant Transactions</h5>
+                        <p class="text-muted small">Real-time transfers, instant deposits, quick withdrawals</p>
+                        <ul class="list-unstyled small text-muted">
+                            <li class="mb-1"><i class="bi bi-check-circle text-success me-2"></i>24/7 processing</li>
+                            <li class="mb-1"><i class="bi bi-check-circle text-success me-2"></i>No delays</li>
+                            <li class="mb-1"><i class="bi bi-check-circle text-success me-2"></i>Global transfers</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Feature 3 -->
+            <div class="col-md-6 col-lg-3">
+                <div class="card feature-card h-100 border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <div class="feature-icon mb-3">
+                            <i class="bi bi-graph-up"></i>
+                        </div>
+                        <h5 class="fw-bold mb-3">Smart Analytics</h5>
+                        <p class="text-muted small">Spending insights, budget tracking, investment recommendations</p>
+                        <ul class="list-unstyled small text-muted">
+                            <li class="mb-1"><i class="bi bi-check-circle text-success me-2"></i>Spending reports</li>
+                            <li class="mb-1"><i class="bi bi-check-circle text-success me-2"></i>Budget tools</li>
+                            <li class="mb-1"><i class="bi bi-check-circle text-success me-2"></i>Growth tracking</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Feature 4 -->
+            <div class="col-md-6 col-lg-3">
+                <div class="card feature-card h-100 border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <div class="feature-icon mb-3">
+                            <i class="bi bi-headset"></i>
+                        </div>
+                        <h5 class="fw-bold mb-3">24/7 Support</h5>
+                        <p class="text-muted small">Live chat, phone support, dedicated account managers</p>
+                        <ul class="list-unstyled small text-muted">
+                            <li class="mb-1"><i class="bi bi-check-circle text-success me-2"></i>Live chat</li>
+                            <li class="mb-1"><i class="bi bi-check-circle text-success me-2"></i>Phone support</li>
+                            <li class="mb-1"><i class="bi bi-check-circle text-success me-2"></i>Email help</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Services Section -->
+<section class="py-5 bg-white">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-lg-8 mx-auto text-center">
+                <h2 class="fw-bold mb-3">Complete Banking Solutions</h2>
+                <p class="text-muted mb-0">Everything you need in one platform</p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card service-card h-100 border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="bg-primary bg-opacity-10 rounded p-3 me-3">
+                                <i class="bi bi-person-circle text-primary fs-4"></i>
+                            </div>
+                            <div>
+                                <h5 class="fw-bold mb-0">Personal Banking</h5>
+                                <small class="text-muted">For Individuals</small>
+                            </div>
+                        </div>
+                        <p class="text-muted small mb-3">
+                            Checking, savings, loans, and credit cards tailored to your personal needs.
+                        </p>
+                        <div class="d-flex flex-wrap gap-2">
+                            <span class="badge bg-light text-dark border">Free Checking</span>
+                            <span class="badge bg-light text-dark border">Savings Accounts</span>
+                            <span class="badge bg-light text-dark border">Personal Loans</span>
+                            <span class="badge bg-light text-dark border">Credit Cards</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card service-card h-100 border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="bg-success bg-opacity-10 rounded p-3 me-3">
+                                <i class="bi bi-building text-success fs-4"></i>
+                            </div>
+                            <div>
+                                <h5 class="fw-bold mb-0">Business Banking</h5>
+                                <small class="text-muted">For Companies</small>
+                            </div>
+                        </div>
+                        <p class="text-muted small mb-3">
+                            Merchant services, business loans, payroll, and corporate accounts.
+                        </p>
+                        <div class="d-flex flex-wrap gap-2">
+                            <span class="badge bg-light text-dark border">Merchant Services</span>
+                            <span class="badge bg-light text-dark border">Business Loans</span>
+                            <span class="badge bg-light text-dark border">Payroll</span>
+                            <span class="badge bg-light text-dark border">Corporate Cards</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card service-card h-100 border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="bg-warning bg-opacity-10 rounded p-3 me-3">
+                                <i class="bi bi-graph-up-arrow text-warning fs-4"></i>
+                            </div>
+                            <div>
+                                <h5 class="fw-bold mb-0">Investment Services</h5>
+                                <small class="text-muted">Wealth Growth</small>
+                            </div>
+                        </div>
+                        <p class="text-muted small mb-3">
+                            Stock trading, retirement planning, wealth management, and investment advice.
+                        </p>
+                        <div class="d-flex flex-wrap gap-2">
+                            <span class="badge bg-light text-dark border">Stock Trading</span>
+                            <span class="badge bg-light text-dark border">Retirement Plans</span>
+                            <span class="badge bg-light text-dark border">Wealth Management</span>
+                            <span class="badge bg-light text-dark border">Advisory</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Benefits Section -->
+<section class="py-5 bg-light-gradient">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-5 mb-lg-0">
+                <div class="position-relative">
+                    <div class="card bg-white border-0 shadow-sm rounded-3 p-3">
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-6">
+                                    <div class="bg-light rounded p-3 text-center border">
+                                        <i class="bi bi-shield-check text-success fs-2 mb-2"></i>
+                                        <h6 class="fw-bold mb-1">Secure</h6>
+                                        <small class="text-muted">Bank-level</small>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="bg-light rounded p-3 text-center border">
+                                        <i class="bi bi-lightning text-warning fs-2 mb-2"></i>
+                                        <h6 class="fw-bold mb-1">Fast</h6>
+                                        <small class="text-muted">Instant transfers</small>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="bg-light rounded p-3 text-center border">
+                                        <i class="bi bi-phone text-primary fs-2 mb-2"></i>
+                                        <h6 class="fw-bold mb-1">Mobile</h6>
+                                        <small class="text-muted">Anywhere access</small>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="bg-light rounded p-3 text-center border">
+                                        <i class="bi bi-headset text-info fs-2 mb-2"></i>
+                                        <h6 class="fw-bold mb-1">Support</h6>
+                                        <small class="text-muted">24/7 help</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-6">
+                <h2 class="fw-bold mb-4">Banking Made Simple & Secure</h2>
+                <div class="accordion" id="benefitsAccordion">
+                    <div class="accordion-item border mb-3">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#benefit1">
+                                <i class="bi bi-shield-check text-success me-2"></i>
+                                Advanced Security Protocols
+                            </button>
+                        </h3>
+                        <div id="benefit1" class="accordion-collapse collapse show" data-bs-parent="#benefitsAccordion">
+                            <div class="accordion-body text-muted">
+                                256-bit encryption, biometric authentication, real-time fraud monitoring, 
+                                and FDIC insurance up to $250,000.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item border mb-3">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button bg-light collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#benefit2">
+                                <i class="bi bi-graph-up text-warning me-2"></i>
+                                Intelligent Financial Insights
+                            </button>
+                        </h3>
+                        <div id="benefit2" class="accordion-collapse collapse" data-bs-parent="#benefitsAccordion">
+                            <div class="accordion-body text-muted">
+                                AI-powered spending analysis, personalized budget recommendations, 
+                                investment tracking, and financial goal setting.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item border mb-3">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button bg-light collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#benefit3">
+                                <i class="bi bi-phone text-primary me-2"></i>
+                                Seamless Mobile Experience
+                            </button>
+                        </h3>
+                        <div id="benefit3" class="accordion-collapse collapse" data-bs-parent="#benefitsAccordion">
+                            <div class="accordion-body text-muted">
+                                Full-featured mobile apps (iOS available now, Android in development), 
+                                mobile check deposit, biometric login, instant notifications, and 24/7 account access.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works -->
+<section class="py-5 bg-white">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-lg-8 mx-auto text-center">
+                <h2 class="fw-bold mb-3">Get Started in 3 Easy Steps</h2>
+                <p class="text-muted mb-0">Simple setup, instant access</p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card border-0 bg-light-gradient h-100 shadow-sm">
+                    <div class="card-body p-4 text-center">
+                        <div class="step-number mb-3">1</div>
+                        <h5 class="fw-bold mb-3">Create Account</h5>
+                        <p class="text-muted small mb-3">
+                            Sign up with basic information. No credit check required.
+                        </p>
+                        <div class="text-primary">
+                            <i class="bi bi-person-plus fs-1"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card border-0 bg-light-gradient h-100 shadow-sm">
+                    <div class="card-body p-4 text-center">
+                        <div class="step-number mb-3">2</div>
+                        <h5 class="fw-bold mb-3">Verify Identity</h5>
+                        <p class="text-muted small mb-3">
+                            Quick verification process. Usually completed in minutes.
+                        </p>
+                        <div class="text-success">
+                            <i class="bi bi-check-circle fs-1"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card border-0 bg-light-gradient h-100 shadow-sm">
+                    <div class="card-body p-4 text-center">
+                        <div class="step-number mb-3">3</div>
+                        <h5 class="fw-bold mb-3">Start Banking</h5>
+                        <p class="text-muted small mb-3">
+                            Access all features instantly. Make your first deposit.
+                        </p>
+                        <div class="text-warning">
+                            <i class="bi bi-bank fs-1"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials -->
+<section class="py-5 bg-light-gradient">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-lg-8 mx-auto text-center">
+                <h2 class="fw-bold mb-3">Trusted by Thousands</h2>
+                <p class="text-muted mb-0">What our customers say about us</p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="https://randomuser.me/api/portraits/men/32.jpg" class="rounded-circle me-3" width="50" height="50" alt="Customer">
+                            <div>
+                                <h6 class="fw-bold mb-0">John Smith</h6>
+                                <small class="text-muted">Business Owner</small>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star-fill text-warning"></i>
+                        </div>
+                        <p class="text-muted small">
+                            "The instant transfers and security features are outstanding. 
+                            Best banking platform I've used."
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="https://randomuser.me/api/portraits/women/44.jpg" class="rounded-circle me-3" width="50" height="50" alt="Customer">
+                            <div>
+                                <h6 class="fw-bold mb-0">Sarah Johnson</h6>
+                                <small class="text-muted">Software Developer</small>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star-half text-warning"></i>
+                        </div>
+                        <p class="text-muted small">
+                            "Mobile app is fantastic! Banking has never been this convenient. 
+                            Highly recommended."
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="https://randomuser.me/api/portraits/men/65.jpg" class="rounded-circle me-3" width="50" height="50" alt="Customer">
+                            <div>
+                                <h6 class="fw-bold mb-0">Michael Chen</h6>
+                                <small class="text-muted">Financial Analyst</small>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star-fill text-warning"></i>
+                        </div>
+                        <p class="text-muted small">
+                            "Analytics tools helped me save 30% more. Excellent platform 
+                            for financial management."
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="py-5 bg-white">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-lg-8 mx-auto text-center">
+                <h2 class="fw-bold mb-3">Frequently Asked Questions</h2>
+                <p class="text-muted mb-0">Quick answers to common questions</p>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-lg-10 mx-auto">
+                <div class="row g-4">
+                    <div class="col-md-6 freq-card">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-body p-4">
+                                <h6 class="fw-bold mb-3">
+                                    <i class="bi bi-shield-check text-success me-2"></i>
+                                    Is my money safe?
+                                </h6>
+                                <p class="text-muted small mb-0">
+                                    Yes! We use 256-bit encryption and all deposits are FDIC insured up to $250,000.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 freq-card">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-body p-4">
+                                <h6 class="fw-bold mb-3">
+                                    <i class="bi bi-clock-history text-primary me-2"></i>
+                                    How fast are transfers?
+                                </h6>
+                                <p class="text-muted small mb-0">
+                                    Most transfers are instant within our network. External transfers take 1-2 business days.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 freq-card">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-body p-4">
+                                <h6 class="fw-bold mb-3">
+                                    <i class="bi bi-phone text-warning me-2"></i>
+                                    Is there a mobile app?
+                                </h6>
+                                <p class="text-muted small mb-0">
+                                    Yes! We have iOS app available now, Android app is in development and coming soon.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 freq-card">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-body p-4">
+                                <h6 class="fw-bold mb-3">
+                                    <i class="bi bi-currency-dollar text-info me-2"></i>
+                                    Are there any fees?
+                                </h6>
+                                <p class="text-muted small mb-0">
+                                    Most basic services are free. We're transparent about any applicable fees.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Mobile Apps Section -->
+<section class="py-5 bg-light-gradient">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-5 mb-lg-0">
+                <div class="position-relative">
+                    <img src="{% static 'img/mobile.png' %}" 
+                         alt="SecureBank Pro Mobile App" 
+                         class="img-fluid rounded-3 shadow-lg"
+                         style="max-height: 400px;">
+                    <!-- Coming Soon Badge -->
+                    <div class="position-absolute top-0 start-0 mt-3 ms-3">
+                        <span class="badge bg-primary px-3 py-2" style="font-size: 0.8rem;">
+                            <i class="bi bi-clock-history me-1"></i> Coming Soon
+                        </span>
+                    </div>
+                    <!-- Rating Badge -->
+                    <div class="position-absolute bottom-0 start-0 mb-3 ms-3">
+                        <span class="badge bg-warning text-dark px-3 py-2" style="font-size: 0.8rem;">
+                            <i class="bi bi-star-fill me-1"></i> 4.8/5 Rating
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="mb-4">
+                    <span class="badge bg-primary bg-opacity-10 text-primary mb-3 px-3 py-2" style="border-radius: 20px;">
+                        <i class="bi bi-phone me-2"></i> Mobile Banking
+                    </span>
+                    <h2 class="fw-bold mb-4">Bank On The Go <span class="text-primary">Coming Soon</span></h2>
+                </div>
+                
+                <div class="row mb-5">
+                    <div class="col-md-6 mb-4">
+                        <div class="card border-0 shadow-sm h-100" style="background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);">
+                            <div class="card-body p-4">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="bg-dark rounded-circle p-3 me-3" style="width: 60px; height: 60px;">
+                                        <i class="bi bi-apple text-white fs-4"></i>
+                                    </div>
+                                    <div>
+                                        <h5 class="fw-bold mb-0">iOS App</h5>
+                                        <small class="text-muted">Apple Store</small>
+                                    </div>
+                                </div>
+                                <p class="text-muted small mb-3">
+                                    Optimized for iPhone and iPad with Face ID/Touch ID support.
+                                </p>
+                                <div class="mt-3">
+                                    <span class="badge bg-secondary me-2" style="font-size: 0.7rem;">iOS 14+</span>
+                                    <span class="badge bg-secondary" style="font-size: 0.7rem;">iPad Support</span>
+                                </div>
+                            </div>
+                            <div class="card-footer bg-transparent border-top-0 pt-0">
+                                <a href="#" class="btn btn-dark btn-sm w-100 disabled">
+                                    <i class="bi bi-clock me-1"></i> Coming Soon
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 mb-4">
+                        <div class="card border-0 shadow-sm h-100" style="background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);">
+                            <div class="card-body p-4">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="bg-success rounded-circle p-3 me-3" style="width: 60px; height: 60px;">
+                                        <i class="bi bi-google-play text-white fs-4"></i>
+                                    </div>
+                                    <div>
+                                        <h5 class="fw-bold mb-0">Android App</h5>
+                                        <small class="text-muted">Google Play</small>
+                                    </div>
+                                </div>
+                                <p class="text-muted small mb-3">
+                                    Compatible with all Android devices featuring fingerprint authentication.
+                                </p>
+                                <div class="mt-3">
+                                    <span class="badge bg-secondary me-2" style="font-size: 0.7rem;">Android 14+</span>
+                                    <span class="badge bg-secondary" style="font-size: 0.7rem;">Tablet Support</span>
+                                </div>
+                            </div>
+                            <div class="card-footer bg-transparent border-top-0 pt-0">
+                                <a href="#" class="btn btn-success btn-sm w-100 disabled">
+                                    <i class="bi bi-clock me-1"></i> Coming Soon
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Notify Me Section -->
+                <div class="card border-0 shadow-sm" style="background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);">
+                    <div class="card-body p-4">
+                        <h5 class="fw-bold mb-3">
+                            <i class="bi bi-bell-fill text-primary me-2"></i>
+                            Notify Me When Available
+                        </h5>
+                        <div class="input-group">
+                            <input type="email" class="form-control form-control-sm" placeholder="Enter your email address">
+                            <button class="btn btn-primary btn-sm" type="button">
+                                <i class="bi bi-bell me-1"></i> Notify Me
+                            </button>
+                        </div>
+                        <div class="mt-3">
+                            <small class="text-muted">
+                                <i class="bi bi-shield-check text-success me-1"></i>
+                                We respect your privacy. No spam.
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Final CTA -->
+<section class="py-5 bg-primary-gradient text-white">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center">
+                <h2 class="fw-bold mb-4">Ready to Transform Your Banking?</h2>
+                <p class="lead mb-4 opacity-75">
+                    Join thousands who trust us with their finances. Start your journey today.
+                </p>
+                <div class="d-flex flex-wrap gap-3 justify-content-center">
+                    {% if not request.user.is_authenticated %}
+                    <a href="{% url 'accounts:user_registration' %}" class="btn btn-light btn-lg px-5">
+                        <i class="bi bi-rocket-takeoff me-2 text-primary"></i> Start Free Trial
+                    </a>
+                    <a href="{% url 'accounts:user_login' %}" class="btn btn-outline-light btn-lg px-5">
+                        <i class="bi bi-box-arrow-in-right me-2"></i> Existing User
+                    </a>
+                    {% else %}
+                    <a href="{% url 'transactions:deposit_money' %}" class="btn btn-light btn-lg px-5">
+                        <i class="bi bi-currency-dollar me-2 text-primary"></i> Make Deposit
+                    </a>
+                    <a href="{% url 'transactions:transaction_report' %}" class="btn btn-outline-light btn-lg px-5">
+                        <i class="bi bi-graph-up me-2"></i> View Dashboard
+                    </a>
+                    {% endif %}
+                </div>
+                <p class="small opacity-75 mt-4">
+                    <i class="bi bi-lock me-1"></i> Secure registration • No credit check • FDIC insured
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    :root {
+        --primary-light: #ffffff;
+        --secondary-light: #a3d1ff;
+        --light-gradient: linear-gradient(135deg, #ffffff 0%, #eaebec 100%);
+        --primary-gradient: linear-gradient(135deg, #0d6efd 0%, #0dcaf0 100%);
+    }
+    
+    .light-gradient {
+        background: var(--light-gradient);
+    }
+    
+    .bg-light-gradient {
+        background: var(--light-gradient);
+    }
+    
+    .bg-primary-gradient {
+        background: var(--primary-gradient);
+    }
+    
+    .text-gradient {
+        background: linear-gradient(90deg, #0d6efd, #0dcaf0);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    
+    .feature-card {
+        background: linear-gradient(135deg, #9bc7f9 0%, #fcfdfe 100%);
+        border: 1px solid #e9ecef !important;
+        transition: all 0.3s ease;
+    }
+    
+    .feature-card:hover {
+        transform: translateY(-5px);
+        border-color: #0d6efd !important;
+        box-shadow: 0 10px 20px rgba(13, 110, 253, 0.1);
+    }
+    
+    .feature-icon {
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(13, 110, 253, 0.1);
+        border-radius: 12px;
+        font-size: 1.5rem;
+        color: #0d6efd;
+    }
+    
+    .service-card {
+        background:linear-gradient(135deg, #aad1fe 0%, #fcfdfe 100%);
+        border: 1px solid #9ec2e6 !important;
+        transition: all 0.3s ease;
+    }
+    
+    .service-card:hover {
+        border-color: #0d6efd !important;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .badge {
+        font-weight: 500;
+    }
+    
+    .accordion-button {
+        background-color: #f8f9fa !important;
+        color: #212529 !important;
+    }
+    
+    .accordion-button:not(.collapsed) {
+        color: #0d6efd !important;
+        background-color: rgba(13, 110, 253, 0.1) !important;
+    }
+    
+    .step-number {
+        width: 50px;
+        height: 50px;
+        background: var(--primary-gradient);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin: 0 auto;
+    }
+    
+    .card {
+        background-color: white;
+        border: 1px solid #e9ecef;
+    }
+        
+
+    .shadow-sm {
+        box-shadow: 0 .125rem .25rem rgba(0,0,0,.075) !important;
+    }
+    
+    .border {
+        border-color: #e9ecef !important;
+    }
+    
+    .btn-outline-primary {
+        border-color: #0d6efd;
+        color: #0d6efd;
+    }
+    
+    .btn-outline-primary:hover {
+        background-color: #0d6efd;
+        color: rgb(15, 13, 13);
+    }
+    
+    /* Hero Image Animation */
+    .hero-section img {
+        animation: float 3s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+        0%, 100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-10px);
+        }
+    }
+    
+    /* Mobile App Badges */
+    .app-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 10px 20px;
+        background: #000;
+        color: white;
+        border-radius: 8px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+    
+    .app-badge:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+    
+    .app-badge.android {
+        background: #3DDC84;
+        color: #000;
+    }
+
+    /* Add this to your existing CSS section */
+
+/* FAQ Cards Styling */
+.freq-card .card {
+    background: linear-gradient(135deg, #9bc7f9 0%, #fcfdfe 100%);
+    border: 1px solid rgba(155, 199, 249, 0.3);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.freq-card .card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #9bc7f9 0%, #4d9bf7 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.freq-card .card:hover::before {
+    opacity: 1;
+}
+
+.freq-card .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(155, 199, 249, 0.2);
+    border-color: rgba(77, 155, 247, 0.5);
+}
+
+.freq-card .card-body {
+    position: relative;
+    z-index: 1;
+}
+
+.freq-card .card-body h6 {
+    color: #1a56db;
+    transition: color 0.3s ease;
+}
+
+.freq-card .card:hover .card-body h6 {
+    color: #0d47a1;
+}
+
+.freq-card .card-body .text-muted {
+    color: #4b5563 !important;
+}
+
+/* Icon styling with gradient backgrounds */
+.freq-card .card-body h6 i {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    margin-right: 10px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.7) 100%);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+
+
+
+.freq-card .card:hover {
+    animation: cardHoverGlow 0.3s ease forwards;
+}
+
+/* Add subtle gradient overlay on hover */
+.freq-card .card {
+    position: relative;
+}
+
+.freq-card .card:hover {
+    background: linear-gradient(135deg, #9bc7f9 0%, #f0f7ff 50%, #fcfdfe 100%);
+}
+
+
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add hover effects to cards
+        const cards = document.querySelectorAll('.feature-card, .service-card');
+        cards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-5px)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+        
+        // Animate accordion items
+        const accordionButtons = document.querySelectorAll('.accordion-button');
+        accordionButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const icon = this.querySelector('i');
+                icon.classList.add('animate__animated', 'animate__flip');
+                
+                setTimeout(() => {
+                    icon.classList.remove('animate__animated', 'animate__flip');
+                }, 500);
+            });
+        });
+        
+        // Notify Me button for Android app
+        const notifyBtn = document.querySelector('.btn-success');
+        if (notifyBtn) {
+            notifyBtn.addEventListener('click', function() {
+                const email = this.closest('.input-group').querySelector('input').value;
+                if (email && email.includes('@')) {
+                    this.innerHTML = '<i class="bi bi-check me-1"></i> Notified!';
+                    this.classList.remove('btn-success');
+                    this.classList.add('btn-secondary');
+                    this.disabled = true;
+                    
+                    // Show success message
+                    const alert = document.createElement('div');
+                    alert.className = 'alert alert-success mt-3';
+                    alert.innerHTML = 'We\'ll notify you when our Android app launches!';
+                    this.closest('.col-lg-6').appendChild(alert);
+                    
+                    setTimeout(() => {
+                        alert.remove();
+                    }, 3000);
+                }
+            });
+        }
+        
+        // Add scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate__animated', 'animate__fadeInUp');
+                    setTimeout(() => {
+                        entry.target.classList.remove('animate__animated', 'animate__fadeInUp');
+                    }, 1000);
+                }
+            });
+        }, observerOptions);
+        
+        // Observe all cards and sections
+        document.querySelectorAll('.feature-card, .service-card, .step-number').forEach(el => {
+            observer.observe(el);
+        });
+    });
+</script>
+
+<!-- Animate.css -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+{% endblock %}

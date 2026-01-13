@@ -1,0 +1,687 @@
+/* ============================================
+   Bank Admin Dashboard - Modern Design System
+   Enhanced Professional Version - Full Width
+   ============================================ */
+
+:root {
+    --primary: #1a73e8;
+    --primary-dark: #0d47a1;
+    --primary-light: #e8f0fe;
+    --primary-gradient: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    
+    --secondary: #6c757d;
+    --success: #28a745;
+    --success-gradient: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
+    --success-light: #d4edda;
+    
+    --warning: #ffc107;
+    --warning-gradient: linear-gradient(135deg, #ffc107 0%, #e0a800 100%);
+    --warning-light: #fff3cd;
+    
+    --danger: #dc3545;
+    --danger-gradient: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    
+    --info: #17a2b8;
+    --info-gradient: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+    
+    --light: #f8f9fa;
+    --dark: #212529;
+    --gray-100: #f5f7fa;
+    --gray-200: #e9ecef;
+    --gray-300: #dee2e6;
+    --gray-400: #ced4da;
+    --gray-500: #adb5bd;
+    --gray-600: #6c757d;
+    --gray-700: #495057;
+    --gray-800: #343a40;
+    --gray-900: #212529;
+    
+    --glass-bg: rgba(255, 255, 255, 0.85);
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --card-bg: rgba(255, 255, 255, 0.95);
+    
+    --shadow-sm: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.08);
+    --shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.12);
+    --shadow-lg: 0 1rem 3rem rgba(0, 0, 0, 0.15);
+    --shadow-hover: 0 1.5rem 3rem rgba(26, 115, 232, 0.2);
+    --shadow-inset: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+    
+    --border-radius: 1rem;
+    --border-radius-sm: 0.75rem;
+    --border-radius-lg: 1.25rem;
+    
+    --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* ==================== FULL WIDTH FIXES ==================== */
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+    background-attachment: fixed;
+    color: var(--gray-800);
+    line-height: 1.7;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    max-width: 100%;
+}
+
+/* Reset all container widths */
+body > div:not(.dashboard-container),
+#container,
+#content,
+.main,
+.content {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box;
+}
+
+/* Dashboard Container - TRULY Full Width */
+.dashboard-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 2rem !important;
+    animation: fadeIn 0.8s ease-out;
+    box-sizing: border-box;
+    overflow-x: hidden;
+}
+
+/* Enhanced Header - Full Width */
+.dashboard-header {
+    padding: 2rem 0;
+    margin-bottom: 3rem;
+    position: relative;
+    width: 100%;
+}
+
+.dashboard-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -2rem;
+    right: -2rem;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--primary), transparent);
+    opacity: 0.3;
+}
+
+.dashboard-title {
+    font-weight: 800;
+    color: var(--dark);
+    font-size: 2.5rem;
+    letter-spacing: -0.75px;
+    margin-bottom: 0.5rem;
+    position: relative;
+    display: inline-block;
+}
+
+.dashboard-title::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 80px;
+    height: 4px;
+    background: var(--primary-gradient);
+    border-radius: 2px;
+}
+
+/* Grid System Overrides */
+.row {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    width: 100%;
+}
+
+.col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-12,
+.col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-12 {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    box-sizing: border-box;
+}
+
+/* Enhanced KPI Cards */
+.kpi-card {
+    border-radius: var(--border-radius-lg);
+    border: none;
+    transition: var(--transition-bounce);
+    overflow: hidden;
+    background: var(--card-bg);
+    backdrop-filter: blur(10px);
+    position: relative;
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--shadow);
+    height: 100%;
+    width: 100%;
+    margin: 0;
+}
+
+/* Enhanced Chart Cards */
+.chart-card {
+    border-radius: var(--border-radius-lg);
+    border: none;
+    overflow: hidden;
+    background: var(--card-bg);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--shadow);
+    transition: var(--transition-smooth);
+    position: relative;
+    width: 100%;
+    margin: 0;
+}
+
+/* Table Fixes */
+.table-responsive {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+/* Dashboard Layout - Enhanced */
+.dashboard-layout {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.dashboard-sidebar {
+    width: 280px;
+    flex: 0 0 280px;
+    position: sticky;
+    top: 2rem;
+    padding-right: 0;
+}
+
+.main-content {
+    flex-grow: 1;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Action Cards */
+.action-card {
+    border-radius: var(--border-radius-lg);
+    border: none;
+    overflow: hidden;
+    background: var(--card-bg);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--shadow);
+    transition: var(--transition-smooth);
+    width: 100%;
+    margin: 0;
+}
+
+/* ==================== REMOVE ALL WHITESPACE ==================== */
+.container-fluid, 
+.container {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+/* Remove Django admin sidebar completely */
+#nav-sidebar, 
+#toggle-nav-sidebar,
+.object-tools,
+.breadcrumbs + br {
+    display: none !important;
+}
+
+/* Fix main content area */
+.main.shifted {
+    margin-left: 0 !important;
+}
+
+#content {
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+/* Enhanced Footer */
+.dashboard-footer {
+    color: var(--gray-600);
+    font-size: 0.95rem;
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border-radius: var(--border-radius-lg);
+    padding: 2rem;
+    margin-top: 3rem;
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Enhanced Buttons */
+.btn-action {
+    border-radius: var(--border-radius);
+    padding: 1rem 1.5rem;
+    font-weight: 600;
+    text-align: left;
+    transition: var(--transition-bounce);
+    border: 2px solid transparent;
+    margin-bottom: 0.75rem;
+    position: relative;
+    overflow: hidden;
+    background: white;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Enhanced Responsive Design - Updated for full width */
+@media (max-width: 1400px) {
+    .dashboard-container {
+        padding: 0 1.5rem !important;
+    }
+    
+    .kpi-value {
+        font-size: 2.25rem;
+    }
+    
+    .chart-container {
+        height: 300px;
+    }
+}
+
+@media (max-width: 1200px) {
+    .dashboard-sidebar {
+        width: 240px;
+        flex: 0 0 240px;
+    }
+}
+
+@media (max-width: 992px) {
+    .dashboard-title {
+        font-size: 2rem;
+    }
+    
+    .dashboard-container {
+        padding: 0 1rem !important;
+    }
+    
+    .dashboard-layout {
+        flex-direction: column;
+    }
+    
+    .dashboard-sidebar {
+        width: 100%;
+        position: static;
+        margin-bottom: 2rem;
+    }
+    
+    .kpi-value {
+        font-size: 2rem;
+    }
+    
+    .kpi-icon .icon-circle {
+        width: 56px;
+        height: 56px;
+        font-size: 1.5rem;
+    }
+    
+    .chart-container {
+        height: 280px;
+    }
+    
+    .chart-card .card-body {
+        min-height: 350px;
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard-title {
+        font-size: 1.75rem;
+    }
+    
+    .dashboard-title::after {
+        width: 60px;
+        height: 3px;
+    }
+    
+    .dashboard-container {
+        padding: 0 0.75rem !important;
+    }
+    
+    .kpi-value {
+        font-size: 1.75rem;
+    }
+    
+    .chart-container {
+        height: 250px;
+    }
+    
+    .chart-card .card-body {
+        min-height: 320px;
+        padding: 1.5rem;
+    }
+    
+    .btn-action {
+        padding: 0.875rem 1.25rem;
+    }
+    
+    .btn-gradient {
+        padding: 0.875rem 1.5rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: 1.5rem;
+        padding: 1.5rem 0;
+    }
+    
+    .dashboard-title {
+        font-size: 1.5rem;
+    }
+    
+    .dashboard-container {
+        padding: 0 0.5rem !important;
+    }
+    
+    .chart-container {
+        height: 220px;
+    }
+    
+    .kpi-card .card-body {
+        padding: 1.25rem;
+    }
+    
+    .dashboard-footer {
+        padding: 1.5rem;
+    }
+}
+
+/* ==================== ENHANCED ANIMATIONS ==================== */
+@keyframes fadeIn {
+    from { 
+        opacity: 0; 
+        transform: translateY(30px) scale(0.95); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0) scale(1); 
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+@keyframes gradientShift {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.6s ease-out;
+}
+
+.slide-in {
+    animation: slideIn 0.5s ease-out;
+}
+
+.float {
+    animation: float 3s ease-in-out infinite;
+}
+
+.pulse {
+    animation: pulse 2s ease-in-out infinite;
+}
+
+/* ==================== ENHANCED GLASS EFFECTS ==================== */
+.glass-effect {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+}
+
+.glass-dark {
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.05));
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* ==================== ENHANCED GRADIENTS ==================== */
+.gradient-text {
+    background: linear-gradient(45deg, var(--primary), var(--success), var(--info));
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradientShift 3s ease infinite;
+}
+
+.gradient-border {
+    position: relative;
+    border: double 3px transparent;
+    border-radius: var(--border-radius);
+    background-image: linear-gradient(white, white), 
+                      linear-gradient(45deg, var(--primary), var(--success));
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+}
+
+/* ==================== ENHANCED CARDS ==================== */
+.card-hover-3d {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-style: preserve-3d;
+}
+
+.card-hover-3d:hover {
+    transform: translateY(-8px) rotateX(5deg);
+    box-shadow: 0 25px 50px rgba(26, 115, 232, 0.15);
+}
+
+.card-glow {
+    position: relative;
+    overflow: hidden;
+}
+
+.card-glow::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.7s ease;
+}
+
+.card-glow:hover::before {
+    left: 100%;
+}
+
+/* ==================== ENHANCED STATS ==================== */
+.stat-pulse {
+    position: relative;
+}
+
+.stat-pulse::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: inherit;
+    box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7);
+    animation: statPulse 2s infinite;
+}
+
+@keyframes statPulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(40, 167, 69, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(40, 167, 69, 0);
+    }
+}
+
+/* ==================== ENHANCED SCROLLBAR ==================== */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--gray-100);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    border-radius: 10px;
+    border: 2px solid var(--gray-100);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+}
+
+/* ==================== ENHANCED LOADING ==================== */
+.loading-shimmer {
+    background: linear-gradient(
+        90deg, 
+        var(--gray-100) 25%, 
+        var(--gray-200) 50%, 
+        var(--gray-100) 75%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: var(--border-radius);
+}
+
+.loading-pulse {
+    animation: pulse 1.5s infinite;
+}
+
+/* ==================== ENHANCED CHARTS ==================== */
+.chart-container {
+    position: relative;
+    height: 350px;
+    width: 100%;
+    margin: 0 auto;
+    border-radius: var(--border-radius-sm);
+    overflow: hidden;
+    background: linear-gradient(135deg, rgba(248, 249, 250, 0.5), rgba(233, 236, 239, 0.5));
+}
+
+.chart-container canvas {
+    display: block;
+    max-width: 100%;
+    height: auto !important;
+}
+
+/* ==================== ENHANCED HEADER ==================== */
+.header-gradient {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.header-gradient::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+    animation: shimmer 3s infinite;
+}
+
+/* ==================== FINAL FIXES ==================== */
+/* Ensure no overflow */
+html, body {
+    overflow-x: hidden;
+    width: 100%;
+}
+
+/* Fix for any remaining whitespace */
+* {
+    box-sizing: border-box;
+}
+
+/* Force full width on all direct children */
+body > * {
+    width: 100% !important;
+    max-width: 100% !important;
+}

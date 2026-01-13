@@ -1,0 +1,68 @@
+{% extends 'core/base.html' %}
+{% load humanize %}
+
+{% block head_title %}Bank Statement - Print{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="text-center mb-4">
+        <h2>Bank Statement</h2>
+        <p class="mb-0">{{ request.user.get_full_name|default:request.user.email }}</p>
+        <p class="mb-0">Account: {{ account.account_no }}</p>
+        {% if form.daterange.value %}
+        <p class="mb-0">Date Range: {{ form.daterange.value }}</p>
+        {% endif %}
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Transaction ID</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                    <th class="text-end">Amount</th>
+                    <th class="text-end">Balance</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for t in object_list %}
+                <tr>
+                    <td>{{ t.timestamp|date:"Y-m-d" }}</td>
+                    <td>{{ t.timestamp|date:"H:i:s" }}</td>
+                    <td>{{ t.id|slice:"-8:"|upper }}</td>
+                    <td>{% if t.transaction_type == 1 %}Deposit{% else %}Withdrawal{% endif %}</td>
+                    <td>{% if t.transaction_type == 1 %}Money deposited to account{% else %}Money withdrawn from account{% endif %}</td>
+                    <td class="text-end">{% if t.transaction_type == 1 %}+ ${{ t.amount|floatformat:2|intcomma }}{% else %}- ${{ t.amount|floatformat:2|intcomma }}{% endif %}</td>
+                    <td class="text-end">${{ t.balance_after_transaction|floatformat:2|intcomma }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="mt-4 text-end fw-bold">
+        Current Balance: ${{ account.balance|floatformat:2|intcomma }}
+    </div>
+</div>
+
+{% endblock %}
+
+{% block footer_extra %}
+<script>
+    // Auto-print then close window
+    window.onload = function() {
+        window.print();
+    };
+</script>
+
+<style>
+    /* Simple print-friendly adjustments */
+    @media print {
+        body { -webkit-print-color-adjust: exact; }
+        .container { width: 100%; }
+    }
+</style>
+{% endblock %}

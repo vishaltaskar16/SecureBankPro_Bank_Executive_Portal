@@ -1,0 +1,454 @@
+{% extends 'core/base.html' %} 
+{% load humanize %} 
+
+{% block head_title %}Transaction History - SecureBank Pro{% endblock %} 
+
+{% block head_extra %}
+<!-- Date Range Picker Resources -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+{% endblock %} 
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Dashboard Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h1 class="h3 fw-bold mb-1">
+                                <i class="bi bi-graph-up me-2"></i>Transaction History
+                            </h1>
+                            <p class="text-muted mb-0">Track all your financial activities</p>
+                        </div>
+                        <div class="text-end">
+                            <div class="fs-4 fw-bold text-success">${{ account.balance|floatformat:2|intcomma }}</div>
+                            <small class="text-muted">Current Balance</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Stats Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3 mb-3">
+            <div class="card border-0 shadow-sm bg-primary text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title mb-1">Total Transactions</h6>
+                            <h3 class="fw-bold">{{ object_list.count }}</h3>
+                        </div>
+                        <i class="bi bi-list-check display-6 opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3 mb-3">
+            <div class="card border-0 shadow-sm bg-success text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title mb-1">Total Deposits</h6>
+                            <h3 class="fw-bold">${{ total_deposits|default:"0.00"|floatformat:2 }}</h3>
+                        </div>
+                        <i class="bi bi-arrow-down-circle display-6 opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3 mb-3">
+            <div class="card border-0 shadow-sm bg-warning text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title mb-1">Total Withdrawals</h6>
+                            <h3 class="fw-bold">${{ total_withdrawals|default:"0.00"|floatformat:2 }}</h3>
+                        </div>
+                        <i class="bi bi-arrow-up-circle display-6 opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3 mb-3">
+            <div class="card border-0 shadow-sm bg-info text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title mb-1">Net Flow</h6>
+                            <h3 class="fw-bold">${{ net_flow|default:"0.00"|floatformat:2 }}</h3>
+                        </div>
+                        <i class="bi bi-arrow-left-right display-6 opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Filter Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <form method="get" id="filterForm">
+                        <div class="row align-items-end">
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label fw-medium">Date Range</label>
+                                <div class="input-group">
+                                    <input type="text" 
+                                           name="daterange" 
+                                           id="daterange" 
+                                           class="form-control" 
+                                           placeholder="Select date range" 
+                                           autocomplete="off"
+                                           value="{{ request.GET.daterange|default:'' }}">
+                                    <button class="btn btn-outline-secondary" type="button" id="clearDate">
+                                        <i class="bi bi-x"></i> Clear
+                                    </button>
+                                </div>
+                                {% if form.daterange.errors %}
+                                <div class="text-danger small mt-1">
+                                    {% for error in form.daterange.errors %}
+                                    <i class="bi bi-exclamation-circle me-1"></i>{{ error }}
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label fw-medium">Transaction Type</label>
+                                <select name="type" class="form-select" id="typeFilter">
+                                    <option value="">All Types</option>
+                                    <option value="deposit" {% if request.GET.type == 'deposit' %}selected{% endif %}>Deposit</option>
+                                    <option value="withdrawal" {% if request.GET.type == 'withdrawal' %}selected{% endif %}>Withdrawal</option>
+                                </select>
+                            </div>
+                            
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label fw-medium">Sort By</label>
+                                <select name="sort" class="form-select" id="sortFilter">
+                                    <option value="-timestamp" {% if request.GET.sort == '-timestamp' %}selected{% endif %}>Newest First</option>
+                                    <option value="timestamp" {% if request.GET.sort == 'timestamp' %}selected{% endif %}>Oldest First</option>
+                                    <option value="amount" {% if request.GET.sort == 'amount' %}selected{% endif %}>Amount (Low to High)</option>
+                                    <option value="-amount" {% if request.GET.sort == '-amount' %}selected{% endif %}>Amount (High to Low)</option>
+                                </select>
+                            </div>
+                            
+                            <div class="col-md-2 mb-3">
+                                <div class="d-flex gap-2">
+                                    <button type="submit" class="btn btn-primary w-100">
+                                        <i class="bi bi-filter me-1"></i> Apply
+                                    </button>
+                                    <a href="{% url 'transactions:transaction_report' %}" class="btn btn-outline-secondary" id="resetFilters">
+                                        <i class="bi bi-arrow-clockwise"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Transactions Table -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">
+                            <i class="bi bi-clock-history me-2"></i>Recent Transactions
+                        </h5>
+                        <div class="dropdown">
+                            <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                <i class="bi bi-download me-1"></i> Export
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="#" id="exportCSV"><i class="bi bi-file-earmark-text me-2"></i>CSV</a></li>
+                                <li><a class="dropdown-item" href="#" id="exportPDF"><i class="bi bi-file-pdf me-2"></i>PDF</a></li>
+                                <li><a class="dropdown-item" href="#" id="exportPrint"><i class="bi bi-printer me-2"></i>Print</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="ps-4">Date & Time</th>
+                                    <th>Transaction ID</th>
+                                    <th>Type</th>
+                                    <th>Description</th>
+                                    <th class="text-end">Amount</th>
+                                    <th class="text-end pe-4">Balance</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for transaction in object_list %}
+                                <tr class="transaction-row">
+                                    <td class="ps-4">
+                                        <div class="fw-medium">{{ transaction.timestamp|date:"M d, Y" }}</div>
+                                        <small class="text-muted">{{ transaction.timestamp|date:"h:i A" }}</small>
+                                    </td>
+                                    <td>
+                                        <code class="small">{{ transaction.id|slice:"-8:"|upper }}</code>
+                                    </td>
+                                    <td>
+                                        {% if transaction.transaction_type == 1 %}
+                                        <span class="badge bg-success">
+                                            <i class="bi bi-arrow-down-circle me-1"></i> Deposit
+                                        </span>
+                                        {% elif transaction.transaction_type == 2 %}
+                                        <span class="badge bg-warning">
+                                            <i class="bi bi-arrow-up-circle me-1"></i> Withdrawal
+                                        </span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <small class="text-muted">
+                                            {% if transaction.transaction_type == 1 %}
+                                            Money deposited to account
+                                            {% elif transaction.transaction_type == 2 %}
+                                            Money withdrawn from account
+                                            {% endif %}
+                                        </small>
+                                    </td>
+                                    <td class="text-end">
+                                        {% if transaction.transaction_type == 1 %}
+                                        <span class="fw-bold text-success">+ ${{ transaction.amount|floatformat:2|intcomma }}</span>
+                                        {% elif transaction.transaction_type == 2 %}
+                                        <span class="fw-bold text-danger">- ${{ transaction.amount|floatformat:2|intcomma }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="text-end pe-4 fw-medium">
+                                        ${{ transaction.balance_after_transaction|floatformat:2|intcomma }}
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="6" class="text-center py-5">
+                                        <i class="bi bi-receipt display-4 text-muted mb-3"></i>
+                                        <h5>No transactions found</h5>
+                                        <p class="text-muted">Start by making your first deposit or withdrawal</p>
+                                        <div class="d-flex gap-2 justify-content-center">
+                                            <a href="{% url 'transactions:deposit_money' %}" class="btn btn-primary">
+                                                <i class="bi bi-plus-circle me-1"></i> Make Deposit
+                                            </a>
+                                            <a href="{% url 'transactions:withdraw_money' %}" class="btn btn-outline-primary">
+                                                <i class="bi bi-dash-circle me-1"></i> Make Withdrawal
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                            {% if object_list %}
+                            <tfoot class="table-light">
+                                <tr>
+                                    <td colspan="4" class="text-end fw-bold ps-4">Current Balance:</td>
+                                    <td colspan="2" class="text-end pe-4 fw-bold text-success">
+                                        ${{ account.balance|floatformat:2|intcomma }}
+                                    </td>
+                                </tr>
+                            </tfoot>
+                            {% endif %}
+                        </table>
+                    </div>
+                    
+                    {% if is_paginated %}
+                    <div class="card-footer bg-white">
+                        <nav aria-label="Transaction pagination">
+                            <ul class="pagination justify-content-center mb-0">
+                                {% if page_obj.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.daterange %}&daterange={{ request.GET.daterange }}{% endif %}{% if request.GET.type %}&type={{ request.GET.type }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}">
+                                        <i class="bi bi-chevron-left"></i> Previous
+                                    </a>
+                                </li>
+                                {% endif %}
+                                
+                                {% for num in page_obj.paginator.page_range %}
+                                {% if page_obj.number == num %}
+                                <li class="page-item active">
+                                    <span class="page-link">{{ num }}</span>
+                                </li>
+                                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ num }}{% if request.GET.daterange %}&daterange={{ request.GET.daterange }}{% endif %}{% if request.GET.type %}&type={{ request.GET.type }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}">
+                                        {{ num }}
+                                    </a>
+                                </li>
+                                {% endif %}
+                                {% endfor %}
+                                
+                                {% if page_obj.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.daterange %}&daterange={{ request.GET.daterange }}{% endif %}{% if request.GET.type %}&type={{ request.GET.type }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}">
+                                        Next <i class="bi bi-chevron-right"></i>
+                                    </a>
+                                </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
+
+{% block footer_extra %}
+<script>
+    $(document).ready(function() {
+        // Initialize date range picker
+        $('#daterange').daterangepicker({
+            autoUpdateInput: false,
+            locale: {
+                format: 'YYYY-MM-DD',
+                cancelLabel: 'Clear',
+                applyLabel: 'Apply'
+            },
+            ranges: {
+                'Today': [moment(), moment()],
+                'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                'This Month': [moment().startOf('month'), moment().endOf('month')],
+                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            },
+            autoApply: true,
+            showDropdowns: true,
+            opens: 'left'
+        });
+        
+        // Handle date range selection
+        $('#daterange').on('apply.daterangepicker', function(ev, picker) {
+            $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+            $('#filterForm').submit();
+        });
+        
+        // Handle clear date
+        $('#clearDate').on('click', function() {
+            $('#daterange').val('');
+            $('#filterForm').submit();
+        });
+        
+        // Auto-submit on filter changes
+        $('#typeFilter, #sortFilter').on('change', function() {
+            $('#filterForm').submit();
+        });
+        
+        // Clear all filters
+        $('#resetFilters').on('click', function(e) {
+            e.preventDefault();
+            window.location.href = "{% url 'transactions:transaction_report' %}";
+        });
+        
+        // Export functionality
+        $('#exportCSV').on('click', function(e) {
+            e.preventDefault();
+            exportData('csv');
+        });
+        
+        $('#exportPDF').on('click', function(e) {
+            e.preventDefault();
+            exportData('pdf');
+        });
+        
+        $('#exportPrint').on('click', function(e) {
+            e.preventDefault();
+            const paramsPrint = new URLSearchParams(window.location.search);
+            paramsPrint.set('format', 'print');
+            // Open a print-friendly page in a new tab/window which will auto-trigger print
+            window.open("{% url 'transactions:transaction_report' %}?" + paramsPrint.toString(), '_blank');
+        });
+        
+        function exportData(format) {
+            const params = new URLSearchParams(window.location.search);
+            params.set('format', format);
+            const url = "{% url 'transactions:transaction_report' %}?" + params.toString();
+            // Open PDF in a new tab to preserve the current UI, other formats use same-window navigation
+            if (format === 'pdf') {
+                window.open(url, '_blank');
+            } else {
+                window.location.href = url;
+            }
+        }
+        
+        // Pre-fill date range from URL if exists
+        const urlParams = new URLSearchParams(window.location.search);
+        const dateRange = urlParams.get('daterange');
+        if (dateRange) {
+            $('#daterange').val(dateRange);
+        }
+        
+        // Add click handlers to transaction rows
+        $('.transaction-row').on('click', function() {
+            const transactionId = $(this).find('code').text().trim();
+            if (transactionId) {
+                console.log('Viewing transaction:', transactionId);
+                // You can implement modal or detail view here
+            }
+        });
+    });
+</script>
+
+<style>
+    /* Date range picker styling */
+    .daterangepicker {
+        font-family: 'Roboto', sans-serif;
+        z-index: 1050 !important;
+    }
+    
+    .daterangepicker td.active, 
+    .daterangepicker td.active:hover {
+        background-color: #0d6efd;
+    }
+    
+    .daterangepicker .ranges li.active {
+        background-color: #0d6efd;
+        color: white;
+    }
+    
+    /* Make the date input field look clickable */
+    #daterange {
+        cursor: pointer;
+        background-color: white;
+    }
+    
+    /* Transaction row hover */
+    .transaction-row:hover {
+        background-color: rgba(13, 110, 253, 0.05);
+        cursor: pointer;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .col-md-4, .col-md-3, .col-md-2 {
+            width: 100%;
+        }
+        
+        .d-flex.gap-2 {
+            flex-direction: column;
+        }
+        
+        .btn {
+            width: 100%;
+            margin-bottom: 5px;
+        }
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,101 @@
+<div class="col-md-3">
+  <div class="card kpi-card shadow-lg hover-3d">
+    <div class="card-body d-flex align-items-center p-4">
+      <div class="me-4 kpi-icon">
+        <div class="icon-circle text-{{ color }} position-relative">
+          <i class="fas fa-{{ icon }}"></i>
+          <div class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" 
+               style="font-size: 0.6rem; padding: 0.25rem 0.4rem; display: none;">
+            New
+          </div>
+        </div>
+      </div>
+      <div class="flex-grow-1">
+        <div class="small text-muted mb-2 d-flex align-items-center">
+          {{ label }}
+          <i class="fas fa-info-circle ms-2" 
+             data-bs-toggle="tooltip" 
+             data-bs-placement="top" 
+             title="Updated in real-time"></i>
+        </div>
+        <div class="h3 mb-2 position-relative">
+          {% if prefix %}<span class="kpi-prefix">{{ prefix }}</span>{% endif %}
+          <span class="kpi-value counter" 
+                data-format="{% if prefix == '$' %}currency{% else %}number{% endif %}"
+                data-value="{{ value }}"
+                style="display: inline-block;">
+            {{ value }}
+          </span>
+          <span class="position-absolute top-0 end-0 badge bg-{{ color }}-subtle text-{{ color }} opacity-0"
+                style="transition: opacity 0.3s ease;">
+            <i class="fas fa-chart-line me-1"></i>
+            Live
+          </span>
+        </div>
+        {% if change %}
+        <div class="small mt-1 kpi-change {% if change|slice:0:1 == '+' %}text-success{% elif change|slice:0:1 == '-' %}text-danger{% endif %}">
+          <i class="fas fa-arrow-{% if change|slice:0:1 == '+' %}up{% else %}down{% endif %} me-1"></i>
+          {{ change }}
+          <span class="ms-2 text-muted">vs last period</span>
+        </div>
+        {% else %}
+        <div class="small text-muted mt-1">
+          <i class="fas fa-sync-alt me-1"></i>
+          Real-time data
+        </div>
+        {% endif %}
+      </div>
+      {% if trend %}
+      <div class="ms-3">
+        <div class="trend-indicator" 
+             data-bs-toggle="tooltip" 
+             data-bs-placement="top" 
+             title="{{ trend.description|default:'Trend indicator' }}">
+          <span class="badge bg-{{ trend.color }}-subtle text-{{ trend.color }} px-3 py-2 rounded-pill">
+            <i class="fas fa-{{ trend.icon }} me-2"></i>
+            <span class="fw-bold">{{ trend.value }}%</span>
+          </span>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+    <div class="card-footer bg-transparent border-0 pt-0">
+      <div class="progress" style="height: 4px;">
+        <div class="progress-bar bg-{{ color }}" 
+             role="progressbar" 
+             style="width: {% if trend.value %}{{ trend.value|add:"50" }}%{% else %}70%{% endif %}"
+             aria-valuenow="{% if trend.value %}{{ trend.value|add:"50" }}{% else %}70{% endif %}" 
+             aria-valuemin="0" 
+             aria-valuemax="100"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Add hover effects to KPI cards
+    const kpiCards = document.querySelectorAll('.kpi-card');
+    kpiCards.forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            const liveBadge = this.querySelector('.badge.bg-{{ color }}-subtle');
+            if (liveBadge) {
+                liveBadge.style.opacity = '1';
+            }
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            const liveBadge = this.querySelector('.badge.bg-{{ color }}-subtle');
+            if (liveBadge) {
+                liveBadge.style.opacity = '0';
+            }
+        });
+    });
+    
+    // Initialize tooltips
+    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+});
+</script>

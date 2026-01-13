@@ -1,0 +1,329 @@
+{% extends 'core/base.html' %} 
+{% load static %} 
+
+{% block head_title %}Register - SecureBank Pro{% endblock %} 
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card border-0 shadow-lg card-hover">
+                <div class="row g-0">
+                    <!-- Left Side - Registration Form -->
+                    <div class="col-lg-7">
+                        <div class="card-body p-5">
+                            <div class="text-center mb-4">
+                                <h2 class="fw-bold text-primary">Create Account</h2>
+                                <p class="text-muted">Join our secure banking platform</p>
+                            </div>
+                            
+                            <!-- Error Messages -->
+                            {% if registration_form.non_field_errors %}
+                            {% for error in registration_form.non_field_errors %}
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <i class="bi bi-exclamation-triangle me-2"></i>
+                                {{ error }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                            {% endfor %}
+                            {% endif %}
+                            
+                            {% if address_form.non_field_errors %}
+                            {% for error in address_form.non_field_errors %}
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <i class="bi bi-exclamation-triangle me-2"></i>
+                                {{ error }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                            {% endfor %}
+                            {% endif %}
+                            
+                            <form method="post" class="needs-validation" novalidate>
+                                {% csrf_token %}
+                                
+                                <!-- Hidden Fields -->
+                                {% for hidden_field in registration_form.hidden_fields %} 
+                                {{ hidden_field.errors }} 
+                                {{ hidden_field }} 
+                                {% endfor %}
+                                
+                                <!-- Personal Details -->
+                                <div class="row mb-3">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-medium">
+                                            <i class="bi bi-person me-1"></i> First Name
+                                        </label>
+                                        {{ registration_form.first_name }}
+                                        {% if registration_form.first_name.errors %}
+                                        <div class="text-danger small mt-1">
+                                            {% for error in registration_form.first_name.errors %}
+                                            <i class="bi bi-exclamation-circle me-1"></i>{{ error }}
+                                            {% endfor %}
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-medium">
+                                            <i class="bi bi-person me-1"></i> Last Name
+                                        </label>
+                                        {{ registration_form.last_name }}
+                                        {% if registration_form.last_name.errors %}
+                                        <div class="text-danger small mt-1">
+                                            {% for error in registration_form.last_name.errors %}
+                                            <i class="bi bi-exclamation-circle me-1"></i>{{ error }}
+                                            {% endfor %}
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                
+                                <!-- Contact Details -->
+                                <div class="row mb-3">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-medium">
+                                            <i class="bi bi-envelope me-1"></i> Email Address
+                                        </label>
+                                        {{ registration_form.email }}
+                                        {% if registration_form.email.errors %}
+                                        <div class="text-danger small mt-1">
+                                            {% for error in registration_form.email.errors %}
+                                            <i class="bi bi-exclamation-circle me-1"></i>{{ error }}
+                                            {% endfor %}
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-medium">
+                                            <i class="bi bi-wallet2 me-1"></i> Account Type
+                                        </label>
+                                        {{ registration_form.account_type }}
+                                        {% if registration_form.account_type.errors %}
+                                        <div class="text-danger small mt-1">
+                                            {% for error in registration_form.account_type.errors %}
+                                            <i class="bi bi-exclamation-circle me-1"></i>{{ error }}
+                                            {% endfor %}
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                
+                                <!-- Personal Information -->
+                                <div class="row mb-3">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-medium">
+                                            <i class="bi bi-gender-ambiguous me-1"></i> Gender
+                                        </label>
+                                        {{ registration_form.gender }}
+                                        {% if registration_form.gender.errors %}
+                                        <div class="text-danger small mt-1">
+                                            {% for error in registration_form.gender.errors %}
+                                            <i class="bi bi-exclamation-circle me-1"></i>{{ error }}
+                                            {% endfor %}
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-medium">
+                                            <i class="bi bi-calendar3 me-1"></i> Birth Date
+                                        </label>
+                                        {{ registration_form.birth_date }}
+                                        {% if registration_form.birth_date.errors %}
+                                        <div class="text-danger small mt-1">
+                                            {% for error in registration_form.birth_date.errors %}
+                                            <i class="bi bi-exclamation-circle me-1"></i>{{ error }}
+                                            {% endfor %}
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                
+                                <!-- Password -->
+                                <div class="row mb-4">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-medium">
+                                            <i class="bi bi-lock me-1"></i> Password
+                                        </label>
+                                        {{ registration_form.password1 }}
+                                        {% if registration_form.password1.errors %}
+                                        <div class="text-danger small mt-1">
+                                            {% for error in registration_form.password1.errors %}
+                                            <i class="bi bi-exclamation-circle me-1"></i>{{ error }}
+                                            {% endfor %}
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-medium">
+                                            <i class="bi bi-lock-fill me-1"></i> Confirm Password
+                                        </label>
+                                        {{ registration_form.password2 }}
+                                        {% if registration_form.password2.errors %}
+                                        <div class="text-danger small mt-1">
+                                            {% for error in registration_form.password2.errors %}
+                                            <i class="bi bi-exclamation-circle me-1"></i>{{ error }}
+                                            {% endfor %}
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                
+                                <!-- Address Information -->
+                                <h5 class="border-bottom pb-2 mb-3">
+                                    <i class="bi bi-house-door me-2"></i>Address Information
+                                </h5>
+                                
+                                {% for hidden_field in address_form.hidden_fields %} 
+                                {{ hidden_field.errors }} 
+                                {{ hidden_field }} 
+                                {% endfor %}
+                                
+                                <div class="row mb-3">
+                                    <div class="col-12 mb-3">
+                                        <label class="form-label fw-medium">
+                                            <i class="bi bi-house me-1"></i> Street Address
+                                        </label>
+                                        {{ address_form.street_address }}
+                                        {% if address_form.street_address.errors %}
+                                        <div class="text-danger small mt-1">
+                                            {% for error in address_form.street_address.errors %}
+                                            <i class="bi bi-exclamation-circle me-1"></i>{{ error }}
+                                            {% endfor %}
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-medium">
+                                            <i class="bi bi-building me-1"></i> City
+                                        </label>
+                                        {{ address_form.city }}
+                                        {% if address_form.city.errors %}
+                                        <div class="text-danger small mt-1">
+                                            {% for error in address_form.city.errors %}
+                                            <i class="bi bi-exclamation-circle me-1"></i>{{ error }}
+                                            {% endfor %}
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <label class="form-label fw-medium">
+                                            <i class="bi bi-mailbox me-1"></i> Postal Code
+                                        </label>
+                                        {{ address_form.postal_code }}
+                                        {% if address_form.postal_code.errors %}
+                                        <div class="text-danger small mt-1">
+                                            {% for error in address_form.postal_code.errors %}
+                                            <i class="bi bi-exclamation-circle me-1"></i>{{ error }}
+                                            {% endfor %}
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <label class="form-label fw-medium">
+                                            <i class="bi bi-globe me-1"></i> Country
+                                        </label>
+                                        {{ address_form.country }}
+                                        {% if address_form.country.errors %}
+                                        <div class="text-danger small mt-1">
+                                            {% for error in address_form.country.errors %}
+                                            <i class="bi bi-exclamation-circle me-1"></i>{{ error }}
+                                            {% endfor %}
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                
+                                <!-- Submit Button -->
+                                <div class="d-grid mt-4">
+                                    <button type="submit" class="btn btn-primary btn-lg">
+                                        <i class="bi bi-person-plus me-2"></i> Create Account
+                                    </button>
+                                </div>
+                                
+                                <!-- Login Link -->
+                                <div class="text-center mt-4">
+                                    <p class="text-muted">
+                                        Already have an account? 
+                                        <a href="{% url 'accounts:user_login' %}" class="text-decoration-none fw-medium">
+                                            Sign In
+                                        </a>
+                                    </p>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <!-- Right Side - Promotional Content -->
+                    <div class="col-lg-5 d-none d-lg-block">
+                        <div class="bank-gradient h-100 d-flex flex-column justify-content-center text-white p-5">
+                            <div class="text-center mb-5">
+                                <i class="bi bi-shield-check display-1"></i>
+                                <h2 class="mt-3 fw-bold">SecureBank Pro</h2>
+                                <p class="lead">Your Security, Our Priority</p>
+                            </div>
+                            
+                            <div class="mt-4">
+                                <div class="d-flex align-items-center mb-4">
+                                    <i class="bi bi-shield-check fs-3 me-3"></i>
+                                    <div>
+                                        <h5 class="mb-1">Bank-Level Security</h5>
+                                        <p class="mb-0 opacity-75">256-bit SSL encryption</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="d-flex align-items-center mb-4">
+                                    <i class="bi bi-lightning-charge fs-3 me-3"></i>
+                                    <div>
+                                        <h5 class="mb-1">Instant Transactions</h5>
+                                        <p class="mb-0 opacity-75">Real-time processing</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="d-flex align-items-center mb-4">
+                                    <i class="bi bi-phone fs-3 me-3"></i>
+                                    <div>
+                                        <h5 class="mb-1">Mobile Banking</h5>
+                                        <p class="mb-0 opacity-75">Access anywhere, anytime</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-headset fs-3 me-3"></i>
+                                    <div>
+                                        <h5 class="mb-1">24/7 Support</h5>
+                                        <p class="mb-0 opacity-75">Always here to help</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-5 text-center">
+                                <small class="opacity-75">
+                                    <i class="bi bi-lock me-1"></i>
+                                    Your information is securely encrypted
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Add Bootstrap classes to form inputs
+    document.addEventListener('DOMContentLoaded', function() {
+        const inputs = document.querySelectorAll('input, select');
+        inputs.forEach(input => {
+            if (!input.classList.contains('btn')) {
+                input.classList.add('form-control');
+            }
+        });
+        
+        // Style select elements
+        const selects = document.querySelectorAll('select');
+        selects.forEach(select => {
+            select.classList.add('form-select');
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,178 @@
+{% extends 'core/base.html' %} 
+
+{% block head_title %}{{ title }} - SecureBank Pro{% endblock %} 
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-lg card-hover">
+                <div class="card-header bank-gradient text-white py-4">
+                    <h2 class="mb-0 text-center">
+                        {% if 'deposit' in request.path %}
+                        <i class="bi bi-arrow-down-circle me-2"></i>
+                        {% elif 'withdraw' in request.path %}
+                        <i class="bi bi-arrow-up-circle me-2"></i>
+                        {% endif %}
+                        {{ title }}
+                    </h2>
+                </div>
+                
+                <div class="card-body p-5">
+                    {% if account %}
+                    <div class="alert alert-info">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-info-circle fs-4 me-3"></i>
+                            <div>
+                                <strong>Current Balance:</strong>
+                                <span class="fs-4 fw-bold text-success ms-2">${{ account.balance|floatformat:2 }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <form method="post" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        
+                        <div class="mb-4">
+                            <label class="form-label fw-medium">
+                                <i class="bi bi-currency-dollar me-1"></i> Amount
+                            </label>
+                            <div class="input-group input-group-lg">
+                                <span class="input-group-text">$</span>
+                                <input type="number" 
+                                       name="amount" 
+                                       id="amount" 
+                                       class="form-control form-control-lg" 
+                                       placeholder="0.00" 
+                                       step="0.01" 
+                                       min="0.01" 
+                                       required>
+                            </div>
+                            
+                            {% if form.amount.errors %}
+                            <div class="text-danger small mt-2">
+                                {% for error in form.amount.errors %}
+                                <i class="bi bi-exclamation-circle me-1"></i>{{ error }}
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                            
+                            <div class="form-text">
+                                {% if 'deposit' in request.path %}
+                                Minimum deposit: $1.00
+                                {% elif 'withdraw' in request.path %}
+                                Minimum withdrawal: $1.00
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <!-- Quick Amount Buttons -->
+                        <div class="mb-4">
+                            <label class="form-label fw-medium">Quick Amount</label>
+                            <div class="d-flex flex-wrap gap-2">
+                                <button type="button" class="btn btn-outline-primary quick-amount" data-amount="10">$10</button>
+                                <button type="button" class="btn btn-outline-primary quick-amount" data-amount="50">$50</button>
+                                <button type="button" class="btn btn-outline-primary quick-amount" data-amount="100">$100</button>
+                                <button type="button" class="btn btn-outline-primary quick-amount" data-amount="500">$500</button>
+                                <button type="button" class="btn btn-outline-primary quick-amount" data-amount="1000">$1,000</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Transaction Details -->
+                        <div class="card border mb-4">
+                            <div class="card-header bg-light">
+                                <h6 class="mb-0"><i class="bi bi-receipt me-2"></i>Transaction Summary</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <small class="text-muted">Transaction Type</small>
+                                        <p class="fw-bold">
+                                            {% if 'deposit' in request.path %}
+                                            <span class="text-success">Deposit</span>
+                                            {% elif 'withdraw' in request.path %}
+                                            <span class="text-danger">Withdrawal</span>
+                                            {% endif %}
+                                        </p>
+                                    </div>
+                                    <div class="col-6">
+                                        <small class="text-muted">Available Balance</small>
+                                        <p class="fw-bold text-success">${{ account.balance|floatformat:2 }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Action Buttons -->
+                        <div class="d-grid gap-3">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                {% if 'deposit' in request.path %}
+                                <i class="bi bi-check-circle me-2"></i> Confirm Deposit
+                                {% elif 'withdraw' in request.path %}
+                                <i class="bi bi-check-circle me-2"></i> Confirm Withdrawal
+                                {% endif %}
+                            </button>
+                            <a href="{% url 'transactions:transaction_report' %}" class="btn btn-outline-secondary btn-lg">
+                                <i class="bi bi-arrow-left me-2"></i> Back to Dashboard
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Security Note -->
+            <div class="alert alert-light border mt-4">
+                <div class="d-flex">
+                    <i class="bi bi-shield-check text-primary fs-4 me-3"></i>
+                    <div>
+                        <h6 class="fw-bold mb-1">Secure Transaction</h6>
+                        <p class="small text-muted mb-0">
+                            All transactions are encrypted and processed in real-time. 
+                            You will receive an instant confirmation via email.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Quick amount buttons
+    document.querySelectorAll('.quick-amount').forEach(button => {
+        button.addEventListener('click', function() {
+            const amount = this.getAttribute('data-amount');
+            document.getElementById('amount').value = amount;
+        });
+    });
+    
+    // Form validation
+    const form = document.querySelector('form');
+    form.addEventListener('submit', function(event) {
+        if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+    });
+    
+    // Format amount input
+    const amountInput = document.getElementById('amount');
+    amountInput.addEventListener('input', function() {
+        let value = this.value;
+        // Remove non-numeric characters except decimal point
+        value = value.replace(/[^\d.]/g, '');
+        // Ensure only one decimal point
+        const parts = value.split('.');
+        if (parts.length > 2) {
+            value = parts[0] + '.' + parts.slice(1).join('');
+        }
+        // Limit decimal places to 2
+        if (parts.length === 2) {
+            value = parts[0] + '.' + parts[1].slice(0, 2);
+        }
+        this.value = value;
+    });
+</script>
+{% endblock %}

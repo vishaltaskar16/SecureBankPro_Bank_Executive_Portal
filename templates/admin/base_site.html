@@ -1,0 +1,371 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block title %}Bank Admin Portal | Secure Financial Management{% endblock %}
+
+{% block extrahead %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/admin_dashboard.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #1a73e8;
+            --primary-dark: #0d47a1;
+            --secondary-color: #6c757d;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --glass-bg: rgba(255, 255, 255, 0.1);
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-attachment: fixed;
+            color: #333;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+        
+        /* Remove any shift from the main container */
+        .main {
+            margin: 0 !important;
+            padding: 0 !important;
+            width: 100% !important;
+            max-width: 100% !important;
+        }
+        
+        #header {
+            background: linear-gradient(135deg, rgba(26, 115, 232, 0.95) 0%, rgba(13, 71, 161, 0.95) 100%);
+            backdrop-filter: blur(10px);
+            color: white;
+            height: 80px;
+            padding: 0 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            width: 100%;
+        }
+        
+        #branding h1 {
+            margin: 0;
+        }
+        
+        #branding h1 a {
+            color: white;
+            font-weight: 800;
+            font-size: 1.8rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            letter-spacing: -0.5px;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+        
+        #branding h1 a:hover {
+            transform: translateY(-2px);
+            text-shadow: 0 5px 15px rgba(255, 255, 255, 0.3);
+        }
+        
+        #branding h1 a:before {
+            content: "🏦";
+            margin-right: 15px;
+            font-size: 1.6rem;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        #branding h1 a:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #fff, transparent);
+            transition: width 0.3s ease;
+        }
+        
+        #branding h1 a:hover:after {
+            width: 100%;
+        }
+        
+        .breadcrumbs {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(248, 249, 250, 0.95)) !important;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            padding: 18px 40px;
+            margin: 0 !important;
+            font-size: 0.95rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            width: 100%;
+        }
+        
+        .breadcrumbs a {
+            color: var(--primary-color);
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+        
+        .breadcrumbs a:hover {
+            color: var(--primary-dark);
+            background: rgba(26, 115, 232, 0.1);
+            transform: translateY(-1px);
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 16px;
+            border-radius: 50px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .user-info:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .welcome-msg {
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.95);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .welcome-msg strong {
+            color: white;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .welcome-msg i {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        #user-tools {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+        
+        #user-tools .btn {
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        #user-tools .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        #user-tools .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        #user-tools .btn:hover::before {
+            left: 100%;
+        }
+        
+        #content {
+            padding: 0 !important;
+            margin: 0 !important;
+            background: transparent;
+            width: 100% !important;
+            max-width: 100% !important;
+        }
+        
+        /* Ensure dashboard takes full width */
+        #content-main {
+            width: 100% !important;
+            max-width: 100% !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+        
+        /* Animations */
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-5px);
+            }
+        }
+        
+        /* Responsive header */
+        @media (max-width: 768px) {
+            #header {
+                padding: 0 20px;
+                height: 70px;
+            }
+            
+            #branding h1 a {
+                font-size: 1.4rem;
+            }
+            
+            .user-info {
+                flex-direction: column;
+                gap: 10px;
+                align-items: flex-end;
+                padding: 8px 12px;
+                border-radius: 20px;
+            }
+            
+            .welcome-msg {
+                font-size: 0.9rem;
+            }
+            
+            .breadcrumbs {
+                padding: 15px 20px;
+            }
+            
+            #user-tools .btn {
+                padding: 6px 15px;
+                font-size: 0.9rem;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            #header {
+                padding: 0 15px;
+                height: 65px;
+            }
+            
+            #branding h1 a {
+                font-size: 1.2rem;
+            }
+            
+            #branding h1 a:before {
+                font-size: 1.2rem;
+                margin-right: 8px;
+            }
+            
+            .breadcrumbs {
+                padding: 12px 15px;
+                font-size: 0.85rem;
+            }
+        }
+        
+        /* Print styles */
+        @media print {
+            #header {
+                display: none;
+            }
+            
+            .breadcrumbs {
+                display: none;
+            }
+        }
+        
+        /* Loading animation for header */
+        @keyframes shimmer {
+            0% {
+                background-position: -200% 0;
+            }
+            100% {
+                background-position: 200% 0;
+            }
+        }
+        
+        .header-loading {
+            background: linear-gradient(
+                90deg,
+                rgba(255,255,255,0.1) 25%,
+                rgba(255,255,255,0.2) 50%,
+                rgba(255,255,255,0.1) 75%
+            );
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+        
+        /* Header badge for notifications */
+        .header-badge {
+            position: relative;
+            margin-right: 10px;
+        }
+        
+        .header-badge .badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: linear-gradient(135deg, #ff4757, #ff3838);
+            color: white;
+            font-size: 0.7rem;
+            padding: 3px 6px;
+            border-radius: 10px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block sidebar %}
+{# intentionally empty to remove left side app list / sidebar #}
+{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">
+    <a href="/" class="navbar-brand">
+        <span class="text-gradient">Bank Executive Portal</span>
+    </a>
+</h1>
+{% endblock %}
+
+{% block welcome-msg %}{% endblock %}
+
+{% block userlinks %}
+    <div class="user-info">
+        <span class="welcome-msg">
+            <i class="fas fa-user-circle me-1"></i>
+            Welcome, <strong>{{ user.get_username }}</strong>
+        </span>
+        <a href="{% url 'admin:logout' %}" class="btn btn-sm btn-outline-light">
+            <i class="fas fa-sign-out-alt me-1"></i> Logout
+        </a>
+    </div>
+{% endblock %}
+
+{% block breadcrumbs %}{% endblock %}
+
+{% block content_title %}{% endblock %}

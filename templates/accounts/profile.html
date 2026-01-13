@@ -1,0 +1,527 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <!-- Profile Header Card -->
+            <div class="card border-0 shadow-lg overflow-hidden mb-5">
+                <div class="bank-gradient position-relative">
+                    <div class="position-absolute top-0 end-0 m-4">
+                        <span class="badge bg-light text-primary fs-6 p-2 shadow">
+                            <i class="bi bi-shield-check me-1"></i>Secure Account
+                        </span>
+                    </div>
+                    <div class="row align-items-center py-5 px-4">
+                        <div class="col-auto">
+                            <div class="profile-avatar position-relative">
+                                <div class="avatar-circle bg-white shadow-lg p-3 rounded-circle">
+                                    <i class="bi bi-person-fill text-primary display-3"></i>
+                                </div>
+                                <div class="status-indicator bg-success position-absolute bottom-0 end-0 rounded-circle p-2 border border-3 border-white"></div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <h1 class="display-5 fw-bold text-white mb-2">{{ user.first_name }} {{ user.last_name }}</h1>
+                            <p class="text-light mb-3">
+                                <i class="bi bi-envelope-fill me-2"></i>{{ user.email }}
+                                {% if user.is_active %}
+                                <span class="badge bg-success ms-2"><i class="bi bi-check-circle-fill me-1"></i>Verified</span>
+                                {% endif %}
+                            </p>
+                            <div class="d-flex flex-wrap gap-3">
+                                <span class="badge bg-light text-primary fs-6 p-2">
+                                    <i class="bi bi-calendar-check me-1"></i>Member Since {{ user.date_joined|date:"M Y" }}
+                                </span>
+                                {% if account %}
+                                <span class="badge bg-light text-primary fs-6 p-2">
+                                    <i class="bi bi-wallet2 me-1"></i>Account #{{ account.account_no|slice:"-8:" }}
+                                </span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <a href="{% url 'accounts:profile_edit' %}" class="btn btn-light btn-lg shadow-sm">
+                                <i class="bi bi-pencil-square me-2"></i>Edit Profile
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content Cards -->
+            <div class="row g-4">
+                <!-- Account Overview Card -->
+                <div class="col-lg-8">
+                    <div class="row g-4">
+                        <!-- Balance Card -->
+                        <div class="col-md-6">
+                            <div class="card border-0 shadow-sm h-100 gradient-card-1">
+                                <div class="card-body p-4 position-relative overflow-hidden">
+                                    <div class="floating-icons">
+                                        <i class="bi bi-coin floating-icon-1"></i>
+                                        <i class="bi bi-cash floating-icon-2"></i>
+                                    </div>
+                                    <div class="position-relative z-1">
+                                        <div class="d-flex justify-content-between align-items-start mb-4">
+                                            <div>
+                                                <h6 class="text-uppercase text-light opacity-75 mb-1">Current Balance</h6>
+                                                {% if account %}
+                                                <h2 class="display-5 fw-bold text-white">${{ account.balance|floatformat:2 }}</h2>
+                                                {% else %}
+                                                <h2 class="display-5 fw-bold text-white">$0.00</h2>
+                                                {% endif %}
+                                            </div>
+                                            <div class="bg-white bg-opacity-25 rounded-circle p-3">
+                                                <i class="bi bi-wallet2 text-white display-6"></i>
+                                            </div>
+                                        </div>
+                                        <div class="border-top border-white border-opacity-25 pt-3">
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <small class="text-light opacity-75">Account Type</small>
+                                                    <p class="fw-bold text-white mb-0">
+                                                        {% if account %}
+                                                        {{ account.account_type.name }}
+                                                        {% else %}
+                                                        Standard
+                                                        {% endif %}
+                                                    </p>
+                                                </div>
+                                                <div class="col-6">
+                                                    <small class="text-light opacity-75">Status</small>
+                                                    <p class="fw-bold text-white mb-0">Active</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Account Details Card -->
+                        <div class="col-md-6">
+                            <div class="card border-0 shadow-sm h-100">
+                                <div class="card-header bg-white border-0 pt-4">
+                                    <h5 class="fw-bold mb-0">
+                                        <i class="bi bi-info-circle-fill text-primary me-2"></i>Account Details
+                                    </h5>
+                                </div>
+                                <div class="card-body p-4">
+                                    <div class="info-item mb-3">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <div class="icon-circle bg-primary bg-opacity-10 text-primary rounded-circle p-2 me-3">
+                                                <i class="bi bi-123 fs-5"></i>
+                                            </div>
+                                            <div>
+                                                <small class="text-muted">Account Number</small>
+                                                {% if account %}
+                                                <p class="fw-bold fs-5 mb-0">{{ account.account_no }}</p>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="info-item mb-3">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <div class="icon-circle bg-success bg-opacity-10 text-success rounded-circle p-2 me-3">
+                                                <i class="bi bi-calendar-event fs-5"></i>
+                                            </div>
+                                            <div>
+                                                <small class="text-muted">Birth Date</small>
+                                                <p class="fw-bold mb-0">
+                                                    {% if account %}
+                                                    {{ account.birth_date }}
+                                                    {% else %}
+                                                    Not set
+                                                    {% endif %}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="info-item">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <div class="icon-circle bg-warning bg-opacity-10 text-warning rounded-circle p-2 me-3">
+                                                <i class="bi bi-gender-ambiguous fs-5"></i>
+                                            </div>
+                                            <div>
+                                                <small class="text-muted">Gender</small>
+                                                <p class="fw-bold mb-0">
+                                                    {% if account %}
+                                                    {{ account.get_gender_display }}
+                                                    {% else %}
+                                                    Not specified
+                                                    {% endif %}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Personal Information Card -->
+                        <div class="col-12">
+                            <div class="card border-0 shadow-sm">
+                                <div class="card-header bg-white border-0 pt-4">
+                                    <h5 class="fw-bold mb-0">
+                                        <i class="bi bi-person-vcard-fill text-primary me-2"></i>Personal Information
+                                    </h5>
+                                </div>
+                                <div class="card-body p-4">
+                                    <div class="row">
+                                        <div class="col-md-6 mb-4">
+                                            <div class="d-flex align-items-center">
+                                                <div class="icon-circle bg-info bg-opacity-10 text-info rounded-circle p-2 me-3">
+                                                    <i class="bi bi-person-badge fs-5"></i>
+                                                </div>
+                                                <div>
+                                                    <small class="text-muted">Full Name</small>
+                                                    <p class="fw-bold fs-5 mb-0">{{ user.first_name }} {{ user.last_name }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-md-6 mb-4">
+                                            <div class="d-flex align-items-center">
+                                                <div class="icon-circle bg-danger bg-opacity-10 text-danger rounded-circle p-2 me-3">
+                                                    <i class="bi bi-envelope-fill fs-5"></i>
+                                                </div>
+                                                <div>
+                                                    <small class="text-muted">Email Address</small>
+                                                    <p class="fw-bold mb-0">{{ user.email }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        {% if address %}
+                                        <div class="col-md-6 mb-4">
+                                            <div class="d-flex align-items-center">
+                                                <div class="icon-circle bg-purple bg-opacity-10 text-purple rounded-circle p-2 me-3">
+                                                    <i class="bi bi-telephone-fill fs-5"></i>
+                                                </div>
+                                                <div>
+                                                    <small class="text-muted">Phone</small>
+                                                    <p class="fw-bold mb-0">{{ address.phone|default:"Not provided" }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-md-6 mb-4">
+                                            <div class="d-flex align-items-center">
+                                                <div class="icon-circle bg-secondary bg-opacity-10 text-secondary rounded-circle p-2 me-3">
+                                                    <i class="bi bi-calendar2-date fs-5"></i>
+                                                </div>
+                                                <div>
+                                                    <small class="text-muted">Last Updated</small>
+                                                    <p class="fw-bold mb-0">{{ user.last_login|date:"M d, Y" }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Address & Quick Actions Sidebar -->
+                <div class="col-lg-4">
+                    <!-- Address Card -->
+                    {% if address %}
+                    <div class="card border-0 shadow-sm mb-4">
+                        <div class="card-header bg-white border-0 pt-4">
+                            <h5 class="fw-bold mb-0">
+                                <i class="bi bi-geo-alt-fill text-primary me-2"></i>Address
+                            </h5>
+                        </div>
+                        <div class="card-body p-4">
+                            <div class="address-container">
+                                <div class="mb-3">
+                                    <div class="d-flex align-items-start mb-2">
+                                        <div class="icon-circle bg-primary bg-opacity-10 text-primary rounded-circle p-2 me-3">
+                                            <i class="bi bi-house-door fs-5"></i>
+                                        </div>
+                                        <div>
+                                            <small class="text-muted">Street Address</small>
+                                            <p class="fw-bold mb-0">{{ address.street_address }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row mb-3">
+                                    <div class="col-6">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <div class="icon-circle bg-success bg-opacity-10 text-success rounded-circle p-2 me-2">
+                                                <i class="bi bi-building fs-6"></i>
+                                            </div>
+                                            <div>
+                                                <small class="text-muted">City</small>
+                                                <p class="fw-bold mb-0">{{ address.city }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <div class="icon-circle bg-warning bg-opacity-10 text-warning rounded-circle p-2 me-2">
+                                                <i class="bi bi-mailbox fs-6"></i>
+                                            </div>
+                                            <div>
+                                                <small class="text-muted">Postal Code</small>
+                                                <p class="fw-bold mb-0">{{ address.postal_code|default:"N/A" }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="d-flex align-items-center">
+                                    <div class="icon-circle bg-danger bg-opacity-10 text-danger rounded-circle p-2 me-3">
+                                        <i class="bi bi-globe fs-5"></i>
+                                    </div>
+                                    <div>
+                                        <small class="text-muted">Country</small>
+                                        <p class="fw-bold mb-0">{{ address.country }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <!-- Quick Actions Card -->
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-white border-0 pt-4">
+                            <h5 class="fw-bold mb-0">
+                                <i class="bi bi-lightning-charge-fill text-primary me-2"></i>Quick Actions
+                            </h5>
+                        </div>
+                        <div class="card-body p-4">
+                            <div class="d-grid gap-3">
+                                <a href="{% url 'transactions:deposit_money' %}" class="btn btn-success btn-lg shadow-sm">
+                                    <i class="bi bi-arrow-down-circle me-2"></i>Make Deposit
+                                </a>
+                                <a href="{% url 'transactions:withdraw_money' %}" class="btn btn-warning btn-lg shadow-sm">
+                                    <i class="bi bi-arrow-up-circle me-2"></i>Withdraw Funds
+                                </a>
+                                <a href="{% url 'transactions:transaction_report' %}" class="btn btn-primary btn-lg shadow-sm">
+                                    <i class="bi bi-clock-history me-2"></i>View Transactions
+                                </a>
+                                <a href="{% url 'accounts:profile_edit' %}" class="btn btn-outline-primary btn-lg">
+                                    <i class="bi bi-gear-fill me-2"></i>Settings
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Security Status Card -->
+                    <div class="card border-0 shadow-sm mt-4 gradient-card-2">
+                        <div class="card-body p-4 text-center">
+                            <div class="mb-3">
+                                <div class="security-badge bg-white bg-opacity-25 rounded-circle p-4 d-inline-block">
+                                    <i class="bi bi-shield-check text-white display-4"></i>
+                                </div>
+                            </div>
+                            <h5 class="fw-bold text-white mb-2">Account Security</h5>
+                            <p class="text-light opacity-75 mb-3">Your account is protected with bank-level security</p>
+                            <div class="security-status">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span class="text-light">Email Verification</span>
+                                    {% if user.is_active %}
+                                    <span class="badge bg-success"><i class="bi bi-check-circle-fill me-1"></i>Verified</span>
+                                    {% else %}
+                                    <span class="badge bg-warning"><i class="bi bi-exclamation-circle-fill me-1"></i>Pending</span>
+                                    {% endif %}
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <span class="text-light">Last Login</span>
+                                    <span class="text-light fw-bold">{{ user.last_login|date:"M d" }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="d-flex justify-content-center gap-3 mt-5">
+                <a href="{% url 'transactions:transaction_report' %}" class="btn btn-outline-primary btn-lg">
+                    <i class="bi bi-arrow-left me-2"></i>Back to Dashboard
+                </a>
+                <a href="{% url 'accounts:profile_edit' %}" class="btn btn-primary btn-lg">
+                    <i class="bi bi-pencil-square me-2"></i>Edit Profile
+                </a>
+                <button class="btn btn-outline-secondary btn-lg" onclick="window.print()">
+                    <i class="bi bi-printer me-2"></i>Print Profile
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Custom CSS Variables */
+    :root {
+        --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        --gradient-4: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        --purple: #6f42c1;
+        --teal: #20c997;
+    }
+    
+    /* Custom Colors */
+    .bg-purple {
+        background-color: var(--purple) !important;
+    }
+    
+    .text-purple {
+        color: var(--purple) !important;
+    }
+    
+    .bg-teal {
+        background-color: var(--teal) !important;
+    }
+    
+    .text-teal {
+        color: var(--teal) !important;
+    }
+    
+    /* Profile Avatar */
+    .profile-avatar {
+        position: relative;
+        width: 120px;
+        height: 120px;
+    }
+    
+    .avatar-circle {
+        width: 120px;
+        height: 120px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+    }
+    
+    .status-indicator {
+        width: 24px;
+        height: 24px;
+    }
+    
+    /* Gradient Cards */
+    .gradient-card-1 {
+        background: var(--gradient-1);
+        color: white;
+        border: none;
+    }
+    
+    .gradient-card-2 {
+        background: var(--gradient-3);
+        color: white;
+        border: none;
+    }
+    
+    /* Icon Circles */
+    .icon-circle {
+        width: 48px;
+        height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        transition: transform 0.3s ease;
+    }
+    
+    .icon-circle:hover {
+        transform: scale(1.1);
+    }
+    
+    /* Floating Icons Animation */
+    .floating-icons {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        overflow: hidden;
+        opacity: 0.1;
+    }
+    
+    .floating-icon-1,
+    .floating-icon-2 {
+        position: absolute;
+        font-size: 6rem;
+        color: white;
+    }
+    
+    .floating-icon-1 {
+        top: -30px;
+        right: -30px;
+    }
+    
+    .floating-icon-2 {
+        bottom: -30px;
+        left: -30px;
+    }
+    
+    /* Card Animations */
+    .card {
+        transition: all 0.3s ease;
+        border-radius: 16px !important;
+        overflow: hidden;
+    }
+    
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.1) !important;
+    }
+    
+    /* Custom Borders */
+    .card-header {
+        border-bottom: 2px solid rgba(0,0,0,0.05);
+    }
+    
+    /* Info Items */
+    .info-item {
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+    
+    .info-item:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+    
+    /* Security Badge */
+    .security-badge {
+        width: 80px;
+        height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    /* Quick Action Buttons */
+    .btn-lg {
+        padding: 0.75rem 1.5rem;
+        font-weight: 500;
+    }
+    
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+        .profile-avatar {
+            margin-bottom: 1.5rem;
+        }
+        
+        .display-5 {
+            font-size: 2rem;
+        }
+        
+        .btn-lg {
+            width: 100%;
+        }
+    }
+</style>
+
+{% endblock %}
